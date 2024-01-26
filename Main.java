@@ -40,22 +40,19 @@ public class Main {
             boolean usernameTaken = false;
 
             System.out.println("What do you want your username to be?");
-            if (scanner.hasNextLine()) {
-                username = scanner.nextLine();
-                try (BufferedReader br = new BufferedReader(new FileReader(file))) {
-                    String line;
-                    while ((line = br.readLine()) != null) {
-                        if (line.equals(username)) {
-                            System.out.println("That username is already taken");
-                            usernameTaken = true;
-                            break;
-                        }
+            username = scanner.nextLine(); // Assign user input to the username variable
+
+            try (BufferedReader br = new BufferedReader(new FileReader("usernames.txt"))) {
+                String line;
+                while ((line = br.readLine()) != null) {
+                    if (line.equals(username)) {
+                        System.out.println("That username is already taken");
+                        usernameTaken = true;
+                        break;
                     }
-                } catch (IOException e) {
-                    System.err.println("Error reading the file: " + e.getMessage());
                 }
-            } else {
-                System.err.println("No input for username.");
+            } catch (IOException e) {
+                System.err.println("Error reading the file: " + e.getMessage());
             }
 
             if (!usernameTaken) {
@@ -84,15 +81,14 @@ public class Main {
 
                 // ADD USERNAME TO USERNAME FILE
                 try (BufferedWriter writer = new BufferedWriter(new FileWriter(file, true))) {
-                // The second parameter 'true' in FileWriter constructor appends to the file
-                // Write a new line
-                writer.newLine();
-                // Write some content
-                writer.write(username);
-                System.out.println(username + " added to the file successfully.");
+                    // The second parameter 'true' in FileWriter constructor appends to the file
+                    // Write a new line
+                    writer.newLine();
+                    // Write some content
+                    writer.write(username);
+                    System.out.println(username + " added to the file successfully.");
                 } catch (IOException e) {
-                System.err.println("Error writing to the file: " + e.getMessage());
-                }
+                    System.err.println("Error writing to the file: " + e.getMessage());
                 }
 
                 // CREATE A GOOD LOOKING PROFILE PAGE FOR THEM
@@ -100,23 +96,20 @@ public class Main {
 
                 String pageFile = username + ".txt";
                 createFile(pageFile);
-                String firstName = profile.getFirstName();
-                String lastName = profile.getLastName();
-                
                 try (BufferedWriter page = new BufferedWriter(new FileWriter(pageFile, true))){
-                    page.write("PAL profile page of " + firstName + lastName);
+                    page.write("PAL profile page of " + firstName + " " + lastName);
                 } catch (IOException e) {
                     e.printStackTrace(); // Handle the exception according to your application's needs
                 }
+            }
 
             // Close scanner
             scanner.close();
-
-            }
         }
+    }
 
     public static boolean createFile(String fileName) {
-        System.out.println("Create file function started runnning");
+        System.out.println("Create file function started running");
 
         File file = new File(fileName);
         try {
